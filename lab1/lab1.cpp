@@ -33,52 +33,59 @@ int main(int argc, char* argv[]) {
 	unsigned char px[2];
 	inFile >> px[0]; cout << "This is " << px[0];
 	inFile >> px[1]; cout << px[1];
-	if (px[1] == '5' && px[0] == 'P') {
-		cerr << "Horse1";
-		P5_image image(fin);
-		cerr << "Horse2";
-		switch (conv) {
-		case 0:
-			image.inversion();
-			break;
-		case 1:
-			image.horizontal_reflection();
-			break;
-		case 2:
-			image.vertical_reflection();
-			break;
-		case 3:
-			image.rotate_right();
-			break;
-		case 4:
-			image.rotate_left();
-			break;
+	try {
+		if (px[1] == '5' && px[0] == 'P') {
+			//cerr << "Horse1";
+			P5_image image(fin);
+			//cerr << "Horse2";
+			switch (conv) {
+			case 0:
+				image.inversion();
+				break;
+			case 1:
+				image.horizontal_reflection();
+				break;
+			case 2:
+				image.vertical_reflection();
+				break;
+			case 3:
+				image.rotate_right();
+				break;
+			case 4:
+				image.rotate_left();
+				break;
+			}
+			image.write(fout);
 		}
-		image.write(fout);
-	}
-	if (px[1] == '6' && px[0] == 'P') {
-		cerr << "Horse1";
-		P6_image image(fin);
-		cerr << "Horse2";
-		switch (conv) {
-		case 0:
-			image.inversion();
-			break;
-		case 1:
-			image.horizontal_reflection();
-			break;
-		case 2:
-			image.vertical_reflection();
-			break;
-		case 3:
-			image.rotate_right();
-			break;
-		case 4:
-			image.rotate_left();
-			break;
+		if (px[1] == '6' && px[0] == 'P') {
+			//cerr << "Horse1";
+			P6_image image(fin);
+			//cerr << "Horse2";
+			switch (conv) {
+			case 0:
+				image.inversion();
+				break;
+			case 1:
+				image.horizontal_reflection();
+				break;
+			case 2:
+				image.vertical_reflection();
+				break;
+			case 3:
+				image.rotate_right();
+				break;
+			case 4:
+				image.rotate_left();
+				break;
+			}
+			image.write(fout);
 		}
-		image.write(fout);
 	}
+	catch (const exception& e) {
+		cerr << "can't create image obj";
+		return 1;
+	}
+	
 
 	return 0;
 }
