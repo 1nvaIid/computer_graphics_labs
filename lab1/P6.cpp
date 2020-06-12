@@ -15,7 +15,7 @@ P6_image::P6_image(string filename) {
 		throw runtime_error("Wrong Header");
 	}
 
-	if (c != 'P' && c1 != '5') {
+	if (c != 'P' && c1 != '6') {
 		throw runtime_error("Wrong Header");
 	}
 	fin.read(&c, 1);
