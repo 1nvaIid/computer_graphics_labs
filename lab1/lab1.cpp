@@ -80,9 +80,6 @@ int main(int argc, char* argv[]) {
 			}
 			image.write(fout);
 		}
-		if (px[0] != 'P' || (px[1] != '6' && px[1] != '5')) {
-			throw runtime_error("not P5/P6 file");
-		}
 	}
 	catch (const exception& e) {
 		cerr << "can't create image obj";

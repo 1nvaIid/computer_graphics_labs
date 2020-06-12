@@ -2,9 +2,22 @@
 
 P6_image::P6_image(string filename) {
 	ifstream fin(filename, ios::binary);
-	char c;
-	fin >> c >> c;
-	fin >> width >> height >> depth;
+	char c, c1;
+	try {
+		fin >> c >> c1;
+		fin >> width >> height >> depth;
+	}
+	catch (const exception& e) {
+		throw runtime_error("Wrong Header");
+	}
+
+	if (depth != 255) {
+		throw runtime_error("Wrong Header");
+	}
+
+	if (c != 'P' && c1 != '5') {
+		throw runtime_error("Wrong Header");
+	}
 	fin.read(&c, 1);
 	data.assign(height, vector<color>(width));
 

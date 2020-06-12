@@ -2,11 +2,28 @@
 
 P5_image::P5_image(string filename) {
 	ifstream fin(filename, ios::binary);
-	char c;
-	fin >> c >> c;
-	fin >> width >> height >> depth;
+	char c, c1;
+	try {
+		fin >> c >> c1;
+		fin >> width >> height >> depth;
+	}
+	catch (const exception& e) {
+		throw runtime_error("Wrong Header");
+	}
+
+	if (depth > 255 || width < 0 || height < 0 || depth <= 0) {
+		throw runtime_error("Wrong Header");
+	}
+
+	if (c != 'P' && c1 != '5') {
+		throw runtime_error("Wrong Header");
+	}
+
 	fin.read(&c, 1);
 	data.assign(height, vector<unsigned char>(width));
+
+	//check header;
+
 
 	char color_bw;
 	for (int i = 0; i < height; i++)
