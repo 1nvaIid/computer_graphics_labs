@@ -8,9 +8,8 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-	//	final double srgb_gamma = 2.4; лол што!!!
 	const double srgb_gamma = 2.4;
-	string fin = string(argv[1]); // какое-то ***мо(не компилится в x64)
+	string fin = string(argv[1]);
 	string fout = string(argv[2]);
 	int brightness;
 	double thickness, x1, x2, y1, y2, gamma;
