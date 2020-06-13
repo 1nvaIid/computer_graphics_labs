@@ -33,7 +33,7 @@ P5_image::P5_image(string filename, double gamma, bool sRGB) {
 	data.assign(height, vector<double>(width));
 
 	//check header;
-
+	
 
 		char color_bw;
 	for (int i = 0; i < height; i++)
@@ -75,6 +75,10 @@ void P5_image::write(string filename, double gamma, bool srgb) {
 
 void P5_image::draw_line(int brightness, double wd, double x0, double y0, double x1, double y1) {
 	{
+		check(x0, width);
+		check(x1, width);
+		check(y1, height);
+		check(y0, height);
 		int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
 		int dy = abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
 		int err = dx - dy, e2, x2, y2;
@@ -123,5 +127,12 @@ void P5_image::setPixelr(int x, int y, double brightness) {
 	}
 	catch (const std::exception&) {
 
+	}
+}
+
+void P5_image::check(double a, int b) {
+	if (a<0 || a>b) {
+		cerr << "wrong point";
+		exit(1);
 	}
 }

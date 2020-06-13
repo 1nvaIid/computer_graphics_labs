@@ -29,7 +29,18 @@ int main(int argc, char* argv[]) {
 		else {
 			gamma = srgb_gamma;
 		}
-
+		if ( brightness>255) {
+			cerr << "Wrong brightness ";
+			return 1;
+		}
+		if ( thickness < 0) {
+			cerr << "Wrong thickness: "<< thickness;
+			return 1;
+		}
+		if (brightness < 0) {
+			cerr << "Wrong brightness ";
+			return 1;
+		}
 	}
 	catch (const exception& e) {
 		cerr << "input errors";

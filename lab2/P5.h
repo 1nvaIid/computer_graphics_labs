@@ -20,4 +20,5 @@ public:
 	void setPixel(int x, int y, double);
 	void setPixell(int x, int y, double);
 	void setPixelr(int x, int y, double);
+	void check(double, int);
 };
