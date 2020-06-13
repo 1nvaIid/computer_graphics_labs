@@ -13,26 +13,29 @@ P5_image::P5_image(string filename, double gamma, bool sRGB) {
 		fin >> width >> height >> depth;
 	}
 	catch (const exception& e) {
-		throw runtime_error("Wrong Header");
+		cerr << "Wrong Header";
+		exit(1);
 	}
 	cout << "ok";
 	if (depth > 255 && width < 0 && height < 0 && depth <= 0) {
-		throw runtime_error("Wrong Header");
+		cerr << "Wrong Header";
+		exit(1);
 	}
 	cout << "ok";
 	if (c != 'P' || c1 != '5') {
 		cout << c << " " << c1;
 
-		throw runtime_error("Wrong Header");
+		cerr << "Wrong Header";
+		exit(1);
 	}
-	cout << "ok";
+	cout << "ok"<<endl;
 	fin.read(&c, 1);
 	data.assign(height, vector<double>(width));
 
 	//check header;
 
 
-	char color_bw;
+		char color_bw;
 	for (int i = 0; i < height; i++)
 		for (int j = 0; j < width; j++)
 		{
@@ -41,7 +44,9 @@ P5_image::P5_image(string filename, double gamma, bool sRGB) {
 				throw runtime_error("N E pixels");
 			}
 			fin.read(&color_bw, 1);
-			data[i][j] = pow(((double)color_bw / depth), 1);
+			data[i][j] = (double)((unsigned char)color_bw) ;
+			data[i][j] = pow(data[i][j], gamma);
+
 		}
 	fin.close();
 }
@@ -52,14 +57,15 @@ void P5_image::write(string filename, double gamma, bool srgb) {
 		throw runtime_error("Can't open output file");
 	}
 	fout << "P5\n" << width << ' ' << height << '\n' << depth << '\n';
+
+	unsigned char press_f;
+
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			//	int m = (int)(pow(data[i][j], 1 / gamma));
-			//  cerr << m << " ";
-			//  data[i][j] = round(pow(data[i][j], 1 / gamma));
-			//	fout << (int)(pow(data[i][j], 1 / gamma));
-			data[i][j] = round(pow(data[i][j], 1) * depth);
-			fout << (unsigned char)data[i][j];
+			press_f = (int)pow(data[i][j], 1 / gamma);
+			//cout << press_f << " ";
+			fout << press_f;
+
 		}
 	}
 	fout.flush();
@@ -95,7 +101,7 @@ void P5_image::draw_line(int brightness, double wd, double x0, double y0, double
 
 void P5_image::setPixel(int x, int y, double brightness) {
 	try {
-		data[x][y] = (brightness / depth);
+		data[x][y] = (brightness);
 	}
 	catch (const std::exception&) {
 
@@ -104,7 +110,7 @@ void P5_image::setPixel(int x, int y, double brightness) {
 
 void P5_image::setPixell(int x, int y, double brightness) {
 	try {
-		data[x][y] = (brightness / (depth * 2) + data[x + 1][y] + data[x][y - 1]) / 3;
+		data[x][y] = (brightness / ( 2) + data[x + 1][y] + data[x][y - 1]) / 3;
 	}
 	catch (const std::exception&) {
 
@@ -113,7 +119,7 @@ void P5_image::setPixell(int x, int y, double brightness) {
 
 void P5_image::setPixelr(int x, int y, double brightness) {
 	try {
-		data[x][y] = (brightness / (depth*2) + data[x - 1][y] + data[x][y + 1]) / 3;
+		data[x][y] = (brightness / (2) + data[x - 1][y] + data[x][y + 1]) / 3;
 	}
 	catch (const std::exception&) {
 

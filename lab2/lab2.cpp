@@ -35,10 +35,12 @@ int main(int argc, char* argv[]) {
 		cerr << "input errors";
 		return 1;
 	}
+
+
 	cout << brightness << " " << x1 << " " << y1 << " " << x2 << " " << y2 << " " << gamma << endl;
 	if (argc != 10 && argc != 9) {
 		std::cerr << "Wrong number of arguments: "<< argc;
-		return 0;
+		return 1;
 	}
 
 	//cout << brightness << " " << x1 << " " << y1 << " " << x2 << " " << y2 << " " << gamma;
