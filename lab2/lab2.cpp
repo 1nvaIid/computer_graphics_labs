@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
 			cerr << "Wrong brightness ";
 			return 1;
 		}
-		if ( thickness < 0) {
+		if ( thickness <= 0) {
 			cerr << "Wrong thickness: "<< thickness;
 			return 1;
 		}
