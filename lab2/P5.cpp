@@ -77,79 +77,92 @@ void P5_image::write(string filename, double gamma, bool srgb) {
 }
 
 
-void P5_image::draw_line(int brightness, double wd, double x0, double y0, double x1, double y1) {
+/*void P5_image::draw_line(int brightness, double wd, double x0, double y0, double x1, double y1) {
 	{
 		check(x0, width);
 		check(x1, width);
 		check(y1, height);
 		check(y0, height);
-		/*if (x0 > x1 || y0 > y1) {
-			cerr << "wrong point location";
-			exit(1);
-		}*/
 		int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
 		int dy = abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
 		int err = dx - dy, e2, x2, y2;
 		float ed = dx + dy == 0 ? 1 : sqrt((float)dx * dx + (float)dy * dy);
 	
 		for (wd = (wd + 1) / 2; ; ) {
-			setPixell(x0, y0, max(0.0, brightness * (abs(err - dx + dy) / ed - wd + 1)));
+			setPixel(x0, y0, max(0.0, depth * (abs(err - dx + dy) / ed - wd + 1)));
 			e2 = err; x2 = x0;
-			if (2 * e2 >= -dx) {
-				for (e2 += dy, y2 = y0; e2 < ed * wd && (y1 != y2 || dx > dy); e2 += dx)
-					setPixell(x0, y2 += sy, max(0.0, brightness * (abs(e2) / ed - wd + 1)));
+			if (2 * e2 >= -dx ) {
+				for (e2 += dy, y2 = y0; e2 < ed * wd && (y1 != y2 || dx > dy); e2 += dx){
+					setPixell(x0, y2 += sy, depth * (abs(e2) / ed - wd + 1));
+				//	cout <<x0 << " "<< (y2 += sy) << " " << depth * (abs(e2) / ed - wd + 1) << " "<< endl;
+				}
+					
 				if (x0 == x1) break;
 				e2 = err; err -= dy; x0 += sx;
 			}
 			if (2 * e2 <= dy) {
 				for (e2 = dx - e2; e2 < ed * wd && (x1 != x2 || dx < dy); e2 += dy)
-					setPixelr(x2 += sx, y0, max(0.0, brightness * (abs(e2) / ed - wd + 1)));
+					setPixelr(x2 += sx, y0, max(0.0, depth * (abs(e2) / ed - wd + 1)));
 				if (y0 == y1) break;
 				err += dx; y0 += sy;
 			}
 		}
 	}
+}*/
+void P5_image::draw_line(int brightness, double wd, double x0, double y0, double x1, double y1) {
+
+
+	
+		int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+		int dy = abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+		int err = dx - dy, e2, x2, y2;                          
+		float ed = dx + dy == 0 ? 1 : sqrt((float)dx * dx + (float)dy * dy);
+
+		for (wd = (wd + 1) / 2; ; ) {                                  
+			setPixel(x0, y0, max((double)(brightness)* (brightness), 255 *(brightness)* (abs(err - dx + dy) / ed - wd + 1)));
+			e2 = err; x2 = x0;
+			if (2 * e2 >= -dx) {                                           
+				for (e2 += dy, y2 = y0; e2 < ed * wd && (y1 != y2 || dx > dy); e2 += dx)
+					setPixel(x0, y2 += sy, max(0.0, 255 * (brightness) * (abs(e2) / ed - wd + 1)));
+				if (x0 == x1) break;
+				e2 = err; err -= dy; x0 += sx;
+			}
+			if (2 * e2 <= dy) {                                            
+				for (e2 = dx - e2; e2 < ed * wd && (x1 != x2 || dx < dy); e2 += dy)
+					setPixel(x2 += sx, y0, max(0.0, 255 * (brightness) * (abs(e2) / ed - wd + 1)));
+				if (y0 == y1) break;
+				err += dx; y0 += sy;
+			}
+		}
+
+
 }
 
 void P5_image::setPixel(int x, int y, double brightness) {
-	try {
-		data[x][y] = (brightness);
-	}
-	catch (const std::exception&) {
-		cerr << "unexisted point";
-	}
+	if(x>=0 && y>=0)
+		data[x][y] = brightness;
+		//cout << x << " " << y << " " << brightness << endl;
+
 }
 
 void P5_image::setPixell(int x, int y, double brightness) {
 	if (y - 1 < 0) {
-		data[x][y] = (brightness / (2) + data[x + 1][y]) / 2;
+		data[x][y] = ((brightness*brightness) / (2) + data[x + 1][y]) / 2;
 	}
 	else {
-		data[x][y] = (brightness / (2) + data[x + 1][y] + data[x][y - 1]) / 3;
+		data[x][y] = ((brightness * brightness) / (2) + data[x + 1][y] + data[x][y - 1]) / 3;
 	}
-	/*try {
-		double f = data[x][y - 1];
-		data[x][y] = (brightness / ( 2) + data[x + 1][y] + f) / 3;
-	}
-	catch (const std::exception&) {
-		data[x][y] = (brightness / (2) + data[x + 1][y]) / 2;
-	}*/
 }
 
 void P5_image::setPixelr(int x, int y, double brightness) {
 	if (x - 1 < 0) {
-		data[x][y] = (brightness / (2) + data[x][y + 1]) / 2;
+		data[x][y] = ((brightness * brightness) / (2) + data[x][y + 1]) / 2;
+		//data[x][y] = (brightness);
 	}
 	else {
-		data[x][y] = (brightness / (2) + data[x - 1][y] + data[x][y + 1]) / 3;
+		data[x][y] = ((brightness * brightness) / (2) + data[x - 1][y] + data[x][y + 1]) / 3;
+		//data[x][y] = (brightness);
 	}
-	/*try {
-		double f = data[x - 1][y];
-		data[x][y] = (brightness / (2) + f + data[x][y + 1]) / 3;
-	}
-	catch (const std::exception&) {
-		data[x][y] = (brightness / (2)  + data[x][y + 1]) / 2;
-	}*/
 }
 
 void P5_image::check(double a, int b) {
