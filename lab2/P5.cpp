@@ -7,7 +7,6 @@ P5_image::P5_image(string filename, double gamma, bool sRGB) {
 		exit(1);
 	}
 	char c, c1;
-	cout << "ok";
 	try {
 		fin >> c >> c1;
 		fin >> width >> height >> depth;
@@ -16,19 +15,18 @@ P5_image::P5_image(string filename, double gamma, bool sRGB) {
 		cerr << "Wrong Header";
 		exit(1);
 	}
-	cout << "ok";
 	if (depth > 255 && width < 0 && height < 0 && depth <= 0) {
 		cerr << "Wrong Header";
 		exit(1);
 	}
-	cout << "ok";
+
 	if (c != 'P' || c1 != '5') {
 		cout << c << " " << c1;
 
 		cerr << "Wrong Header";
 		exit(1);
 	}
-	cout << "ok"<<endl;
+
 	fin.read(&c, 1);
 	data.assign(height, vector<double>(width));
 
@@ -87,7 +85,7 @@ void P5_image::draw_line(int brightness, double wd, double x0, double y0, double
 		int dy = abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
 		int err = dx - dy, e2, x2, y2;
 		float ed = dx + dy == 0 ? 1 : sqrt((float)dx * dx + (float)dy * dy);
-
+	
 		for (wd = (wd + 1) / 2; ; ) {
 			setPixell(x0, y0, max(0.0, brightness * (abs(err - dx + dy) / ed - wd + 1)));
 			e2 = err; x2 = x0;

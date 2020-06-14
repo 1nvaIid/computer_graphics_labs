@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 	}
 
 
-	cout << brightness << " " << x1 << " " << y1 << " " << x2 << " " << y2 << " " << gamma << endl;
+
 	if (argc != 10 && argc != 9) {
 		std::cerr << "Wrong number of arguments: "<< argc;
 		return 1;
