@@ -28,7 +28,13 @@ P5_image::P5_image(string filename, double gamma, bool sRGB) {
 	}
 
 	fin.read(&c, 1);
-	data.assign(height, vector<double>(width));
+	try {
+		data.assign(height, vector<double>(width));
+	}
+	catch (const exception& e) {
+		cerr << "troubles with memory";
+		exit(1);
+	}
 
 	//check header;
 	
@@ -110,26 +116,40 @@ void P5_image::setPixel(int x, int y, double brightness) {
 		data[x][y] = (brightness);
 	}
 	catch (const std::exception&) {
-
+		cerr << "unexisted point";
 	}
 }
 
 void P5_image::setPixell(int x, int y, double brightness) {
-	try {
-		data[x][y] = (brightness / ( 2) + data[x + 1][y] + data[x][y - 1]) / 3;
+	if (y - 1 < 0) {
+		data[x][y] = (brightness / (2) + data[x + 1][y]) / 2;
+	}
+	else {
+		data[x][y] = (brightness / (2) + data[x + 1][y] + data[x][y - 1]) / 3;
+	}
+	/*try {
+		double f = data[x][y - 1];
+		data[x][y] = (brightness / ( 2) + data[x + 1][y] + f) / 3;
 	}
 	catch (const std::exception&) {
-
-	}
+		data[x][y] = (brightness / (2) + data[x + 1][y]) / 2;
+	}*/
 }
 
 void P5_image::setPixelr(int x, int y, double brightness) {
-	try {
+	if (x - 1 < 0) {
+		data[x][y] = (brightness / (2) + data[x][y + 1]) / 2;
+	}
+	else {
 		data[x][y] = (brightness / (2) + data[x - 1][y] + data[x][y + 1]) / 3;
 	}
-	catch (const std::exception&) {
-
+	/*try {
+		double f = data[x - 1][y];
+		data[x][y] = (brightness / (2) + f + data[x][y + 1]) / 3;
 	}
+	catch (const std::exception&) {
+		data[x][y] = (brightness / (2)  + data[x][y + 1]) / 2;
+	}*/
 }
 
 void P5_image::check(double a, int b) {
