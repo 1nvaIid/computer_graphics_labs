@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
 	try {
 		P5_image image(fin, gamma, false);
-		image.draw_line(brightness, thickness, x1, y1, x2, y2);
+		image.draw_line(brightness, x1, y1, x2, y2, gamma);
 		image.write(fout,  gamma, false);
 	}
 	catch (const exception& e) {
