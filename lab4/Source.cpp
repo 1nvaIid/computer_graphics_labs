@@ -57,14 +57,16 @@ int main(int argc, char* argv[]) {
 
     try {
         P6 image(in[0], in[1], in[2]);
+        image.conv(space_in,space_out);
         image.write(out[0], out[1], out[2]);
     }
     catch (const exception e) {
         cerr << "Cant create obj";
     }
-   /* Point p = { 240,100,25 };
+ /* Point p = { 76,255,35 };
     cout << (int)p.b1 << " " << (int)p.b2 << " " << (int)p.b3<<endl;
-    Point p1 = HSL_to_RGB(p);
+    Point p1 = YCoCg_to_RGB(p);
+    p1 = RGB_to_YCoCg(p1);
     cout << (int)p1.b1 << " " << (int)p1.b2 << " " << (int)p1.b3;*/
    return 0;
 }

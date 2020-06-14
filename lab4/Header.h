@@ -26,3 +26,13 @@ public:
 
 Point RGB_to_HSL(Point p);
 Point HSL_to_RGB(Point p);
+Point RGB_to_HSV(Point p);
+Point HSV_to_RGB(Point p);
+Point RGB_to_YCbCr601(Point p);
+Point YCbCr601_to_RGB(Point p);
+Point RGB_to_YCbCr709(Point p);
+Point YCbCr709_to_RGB(Point p);
+Point RGB_to_YCoCg(Point p);
+Point YCoCg_to_RGB(Point p);
+Point RGB_to_CMY(Point p);
+Point CMY_to_RGB(Point p);
