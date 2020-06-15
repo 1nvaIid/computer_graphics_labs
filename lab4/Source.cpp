@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     string space_in, space_out;
-    string in[] = { "Sunday", "Monday", "Tuesday" }, out[] = { "Sunday", "Monday", "Tuesday" };
+    string in, out;
         
     int in_count, out_count;
     try {
@@ -26,19 +26,12 @@ int main(int argc, char* argv[]) {
             }
             if (string(argv[i]) == "-i") {
                 in_count = atoi(argv[i + 1]);
-                for (int j = 0; j < in_count; j++)
-                {
-                    in[j] = string(argv[i + 2]);
-                    i++;
-                }
+                in = string(argv[i + 2]);
             }
             if (string(argv[i]) == "-o") {
-                out_count = atoi(argv[i + 1]);
-                for (int j = 0; j < out_count; j++)
-                {
-                    out[j] = string(argv[i + 2]);
-                    i++;
-                }
+				out_count = atoi(argv[i + 1]);
+				out = string(argv[i + 2]);
+                
             }
         }
     }
@@ -56,9 +49,45 @@ int main(int argc, char* argv[]) {
 
 
     try {
-        P6 image(in[0], in[1], in[2]);
-        image.conv(space_in,space_out);
-        image.write(out[0], out[1], out[2]);
+        if (in_count == 1) {
+            P6 image(in);
+            //cout << " ok";
+            image.conv(space_in, space_out);
+            if (out_count == 1) {
+                image.write(out);
+            }
+            else {
+				string o1 = out;
+				o1.insert(out.length() - 4, "_1");
+				string o2 = out;
+				o2.insert(out.length() - 4, "_2");
+				string o3 = out;
+				o3.insert(out.length() - 4, "_3");
+				image.write(o1, o2, o3);
+            }
+        }
+        else {
+            string i1 = in;
+            i1.insert(in.length() - 4, "_1");
+            string i2 = in;
+            i2.insert(in.length() - 4, "_2");
+            string i3 = in;
+            i3.insert(in.length() - 4, "_3");
+            P6 image(i1,i2,i3);
+            image.conv(space_in, space_out);
+            if (out_count == 1) {
+                image.write(out);
+            }
+            else {
+                string o1 = out;
+                o1.insert(out.length() - 4, "_1");
+                string o2 = out;
+                o2.insert(out.length() - 4, "_2");
+                string o3 = out;
+                o3.insert(out.length() - 4, "_3");
+                image.write(o1, o2, o3);
+            }
+        }
     }
     catch (const exception e) {
         cerr << "Cant create obj";

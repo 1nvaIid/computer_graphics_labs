@@ -4,6 +4,7 @@
 using namespace std;
 
 P6::P6(string in1) {
+	
 	ifstream fin(in1, ios::binary);
 	if (!fin.is_open()) {
 		cerr << "Can't open file";
@@ -23,12 +24,12 @@ P6::P6(string in1) {
 		exit(1);
 	}
 	if (c != 'P' || c1 != '6') {
-		cout << c << " " << c1;
+		//cout << c << " " << c1;
 
 		cerr << "Wrong Header";
 		exit(1);
 	}
-
+	
 	fin.read(&c, 1);
 	try {
 		data.assign(height, vector<Point>(width));
@@ -46,8 +47,8 @@ P6::P6(string in1) {
 		for (int j = 0; j < width; j++)
 		{
 			if (fin.eof()) {
-				fin.close();
-				throw runtime_error("N E pixels");
+				cerr << "N E pixels";
+				exit(1);
 			}
 			fin.read(&br, 1);
 			data[i][j].b1 = ((unsigned char)br);
@@ -63,7 +64,9 @@ P6::P6(string in1, string in2, string in3) {
 	ifstream fin1(in1, ios::binary);
 	ifstream fin2(in2, ios::binary);
 	ifstream fin3(in3, ios::binary);
+	//cout << in1 << " " << in2 << in3;
 	if (!fin1.is_open() && !fin2.is_open() && !fin3.is_open()) {
+		//cout << in1<< " "<< in2  <<  in3;
 		cerr << "Can't open file, use different files";
 		exit(1);
 	}
