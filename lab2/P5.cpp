@@ -80,40 +80,56 @@ void P5_image::write(string filename, double gamma, bool srgb) {
 
 
 
-void P5_image::draw_line(int brightness, double x0, double y0, double x1, double y1, double gamma) {
 
-	if (x0>x1) {
-		swap(x0, y0);
+double fpart(double x) {
+	return x - floor(x);
+}
+
+void P5_image::draw_line(int brightness, double x1, double y1, double x2, double y2, double gamma) {
+
+	if (x2 < x1) {
+		swap(x1, x2);
+		swap(y1, y2);
 	}
-	int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-	int dy = abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-	int err = dx - dy, e2, x2, y2;                          /* error value e_xy */
-	double ed = dx + dy == 0 ? 1 : sqrt((float)dx * dx + (float)dy * dy);
-	int wd = 1;
-	for (wd = (wd + 1) / 2; ; ) {                                   /* pixel loop */
-		setPixel(x0, y0, brightness);
-		e2 = err; x2 = x0;
-		if (2 * e2 >= -dx) {                                           /* x step */
-			for (e2 += dy, y2 = y0; e2 < ed * wd && (y1 != y2 || dx > dy); e2 += dx)
-				if(sr<128) setPixel(x0, y2 += sy, 255-sr - max(0.0, 255 * (abs(e2) / ed - wd + 1)));
-				else setPixel(x0, y2 += sy, sr + max(0.0, 255 * (abs(e2) / ed - wd + 1)));
-			if (x0 == x1) break;
-			e2 = err; err -= dy; x0 += sx;
-		}
-		if (2 * e2 <= dy) {                                            /* y step */
-			for (e2 = dx - e2; e2 < ed * wd && (x1 != x2 || dx < dy); e2 += dy)
-				if (sr < 128) setPixel(x2 += sx, y0, 255 - sr - max(0.0, 255 * (abs(e2) / ed - wd + 1)));
-				else setPixel(x2 += sx, y0, sr + max(0.0, 255 * (abs(e2) / ed - wd + 1)));
-			if (y0 == y1) break;
-			err += dx; y0 += sy;
-		}
+	double dx = x2 - x1;
+	double dy = y2 - y1;
+	double gradient = dy / dx;
+	double xend = round(x1);
+	double yend = y1 + gradient * (xend - x1);
+	double xgap = 1 - fpart(x1 + 0.5);
+	double xpxl1 = xend;
+	double ypxl1 = floor(yend);
+	plot(xpxl1, ypxl1, (1 - fpart(yend)) * xgap*brightness/255);
+	plot(xpxl1, ypxl1 + 1, fpart(yend) * xgap * brightness / 255);
+	double intery = yend + gradient;
+	 xend = round(x2);
+	yend = y2 + gradient * (xend - x2);
+	 xgap = fpart(x2 + 0.5);
+	double xpxl2 = xend;
+	double ypxl2 = floor(yend);
+	plot(xpxl2, ypxl2, (1 - fpart(yend)) * xgap * brightness / 255);
+	plot(xpxl2, ypxl2 + 1, fpart(yend) * xgap * brightness / 255);
+
+	for (int i = xpxl1 + 1; i < xpxl2 - 1; i++) {
+		plot(i, floor(intery), (1 - fpart(intery)) * brightness / 255);
+		plot(i, floor(intery) + 1, fpart(intery) * brightness / 255);
+		intery = intery + gradient;
 	}
+		
 }
 
 
-void P5_image::setPixel(int x, int y, double brightness) {
+
+
+
+
+
+
+
+
+void P5_image::plot(int x, int y, double brightness) {
 	if(x>=0 && y>=0)
-		data[x][y] = brightness;
+		data[floor(x)][floor(y)] = round(brightness*255);
 
 	//cout << x << " " << y << " " << brightness * brightness << endl;
 		//cout << x << " " << y << " " << brightness << endl;
