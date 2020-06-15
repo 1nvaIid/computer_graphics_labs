@@ -404,9 +404,9 @@ Point YCbCr601_to_RGB(Point p) {
 	double Cb = p.b2 / 255.0 - 0.5;
 	double Cr = p.b3 / 255.0 - 0.5;
 
-	double Kb = 0.299;
-	double Kr = 0.587;
-	double Kg = 0.114;
+	double Kr = 0.299;
+	double Kg = 0.587;
+	double Kb = 0.114;
 
 	double r = Y + (2.0 - 2.0 * Kr) * Cr;
 	double g = Y - Kb * (2.0 - 2.0 * Kb) * Cb / Kg - Kr * (2 - 2.0 * Kr) * Cr / Kg;
@@ -430,9 +430,9 @@ Point RGB_to_YCbCr709(Point p) {
 	double g = p.b2 * 1.0 / 255;
 	double b = p.b3 * 1.0 / 255;
 
-	double Kb = 0.0722;
-	double Kr = 0.2126;
-	double Kg = 0.7152;
+	double Kr = 0.299;
+	double Kg = 0.587;
+	double Kb = 0.114;;
 
 	double Y = Kr * r + Kg * g + Kb * b;
 	double Cb = (b - Y) / (2 * (1 - Kb));
