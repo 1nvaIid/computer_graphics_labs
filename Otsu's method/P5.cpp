@@ -197,4 +197,7 @@ void P5_image::otsu(int class_count)
 	{
 		cout << optimizedthresh[i]<<endl;
 	}
+	delete probability;
+	delete histogram;
+	delete optimizedthresh;
 }
