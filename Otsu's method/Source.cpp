@@ -10,6 +10,7 @@ int main(int argc, char* argv[]) {
 	if (argc != 4) {
 		std::cerr << "Wrong number of arguments: " << argc;
 		return 1;
+	}
 	string fin = string(argv[1]);
 	string fout = string(argv[2]);
 	int class_numb;
