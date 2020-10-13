@@ -137,8 +137,7 @@ void P5_image::otsu(int class_count)
 	mu1 = 0;
 	mu2 = 0;
 	mu = sum / (width * height);
-	int treashold = 0;
-	//q -сумма вероятностей цветов в кластере	
+	int treashold = 0;	
 	q1prev = q1;//set previous q1, q1(t), to equal the current q1
 	for (int m = 1; m < class_count; m++)
 	{
