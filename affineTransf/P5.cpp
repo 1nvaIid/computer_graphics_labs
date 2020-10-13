@@ -31,8 +31,8 @@ P5_image::P5_image(string filename) {
 	fin.read(&c, 1);
 	try {
 		data.assign(height, vector<double>(width));
-		data_plus.assign(height, vector<double>(width));
-		data_tilda.assign(height, vector<double>(width));
+		newdata.assign(height, vector<double>(width));
+		count.assign(height, vector<int>(width));
 	}
 	catch (const exception& e) {
 		cerr << "troubles with memory";
@@ -63,18 +63,19 @@ void P5_image::write(string filename) {
 	if (!fout.is_open()) {
 		throw runtime_error("Can't open output file");
 	}
-	fout << "P5\n" << width << ' ' << height << '\n' << depth << '\n';
-
+	//fout << "P5\n" << width << ' ' << height << '\n' << depth << '\n';
+	fout << "P5\n" << -start_x + end_x << ' ' << -start_y + end_y << '\n' << depth << '\n';
 	unsigned char press_f;
 
-	for (int i = 0; i < height; i++) {
-		for (int j = 0; j < width; j++) {
-			press_f = (int)data[i][j];
+	for (int i = start_y; i < end_y; i++) {
+		for (int j = start_x; j < end_x; j++) {
+			press_f = (int)newdata[i][j];
 			//cout << press_f << " ";
 			fout << press_f;
 
 		}
 	}
+	
 	fout.flush();
 	fout.close();
 }
@@ -108,16 +109,68 @@ void P5_image::akoefs() {
 	}
 	//cout << B << " " << C << " " << D;
 	mu = sqrt((D + sqrt(C * C + B * B)) / (D - sqrt(C * C + B * B)));
-	omega = 0.5 * atan(C / B);
+	omega = 0.5 * atan2(C, B);
 	cout << "Направление центрированного изображения: " << omega << endl;
 	cout << "Величина сжатия:" << mu << endl;
+	float minx = 0, maxx = 0;
+	float miny = 0, maxy = 0;
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
+
 			x_plus = (1 / mu) * ((x - Xc) * cos(-omega) - (y - Yc) * sin(-omega)) * cos(omega) - ((x - Xc) * sin(-omega) + (y - Yc) * cos(-omega)) * sin(omega);
 			y_plus = (1 / mu) * ((x - Xc) * cos(-omega) - (y - Yc) * sin(-omega)) * sin(omega) + ((x - Xc) * sin(-omega) + (y - Yc) * cos(-omega)) * cos(omega);
 			//cout << x_plus << y_plus << endl;
 			M += data[y][x] * sqrt(x_plus * x_plus + y_plus * y_plus) / (K * sum_T);
+			/*if (x_plus < minx) {
+				minx = x_plus;
+			}
+			if (x_plus > maxx) {
+				maxx = x_plus;
+			}
+			if (y_plus < miny) {
+				miny = y_plus;
+			}
+			if (y_plus > maxy) {
+				maxy = y_plus;
+			}*/
 		}
 	}
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+
+			x_plus = ((1 / mu) * ((x - Xc) * cos(-omega) - (y - Yc) * sin(-omega)) * cos(omega) - ((x - Xc) * sin(-omega) + (y - Yc) * cos(-omega)) * sin(omega)) / M;
+			y_plus = ((1 / mu) * ((x - Xc) * cos(-omega) - (y - Yc) * sin(-omega)) * sin(omega) + ((x - Xc) * sin(-omega) + (y - Yc) * cos(-omega)) * cos(omega)) / M;
+			//cout << x_plus << y_plus << endl;
+			newdata[(int)y_plus + 200][(int)x_plus + 200] += data[y][x];
+			count[(int)y_plus + 200][(int)x_plus + 200] += 1;
+			if (x_plus < minx) {
+				minx = x_plus;
+			}
+			if (x_plus > maxx) {
+				maxx = x_plus;
+			}
+			if (y_plus < miny) {
+				miny = y_plus;
+			}
+			if (y_plus > maxy) {
+				maxy = y_plus;
+			}
+
+			//M += data[y][x] * sqrt(x_plus * x_plus + y_plus * y_plus) / (K * sum_T);
+		}
+	}
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			if (count[y][x] != 0)
+			{
+				newdata[y][x] = newdata[y][x] / count[y][x];
+			}
+		}
+	}
+	start_x = minx + 200, start_y = miny + 200, end_x = maxx + 200, end_y = maxy + 200;
+	/*cout << 200 + minx << endl;
+	cout << 200 + maxx << endl;
+	cout << 200 + miny << endl;
+	cout << 200 + maxy << endl;*/
 	cout << "Равномерное масштабирование:" << M << endl;
 }

@@ -12,9 +12,10 @@ using namespace std;
 class P5_image {
 private:
 	int width, height, depth, cc;
+	int start_x, start_y, end_x, end_y;
 	vector<vector<double>> data;
-	vector<vector<double>> data_plus;
-	vector<vector<double>> data_tilda;
+	vector<vector<double>> newdata;
+	vector<vector<int>> count;
 public:
 	double sr;
 	P5_image(string filename);
