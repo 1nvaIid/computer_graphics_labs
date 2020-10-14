@@ -8,6 +8,10 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     //cerr << argv[1] << " " << argv[2] << " " << argv[3];
+    if (argc!=4) {
+        cerr << "Wrong number of arguments";
+        exit(1);
+    }
     string in = argv[1], out = argv[2];
     int sh = stold(argv[3]);
 
