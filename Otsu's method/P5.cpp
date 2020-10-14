@@ -295,7 +295,7 @@ void P5_image::otsu(int class_count)
 	q1prev = q1;//set previous q1, q1(t), to equal the current q1
 	for (int m = 1; m < class_count; m++)
 	{
-		for (int k = 255 - class_count - 1; k > m; k--)
+		for (int k = 255 ; k > m; k--)
 		{
 			//q1prev = probability[m];
 
