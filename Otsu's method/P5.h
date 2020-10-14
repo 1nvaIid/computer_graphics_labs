@@ -20,5 +20,6 @@ public:
 	void write(string filename);
 	int otsuThreshold();
 	void otsu(int class_count);
+	void otsu2(int class_count);
 	void maximum_inter_cluster_distances(int class_count);
 };

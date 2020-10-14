@@ -31,7 +31,14 @@ int main(int argc, char* argv[]) {
 
 	try {
 		P5_image image(fin, class_numb);
-		image.otsu(class_numb);
+		if (class_numb==2)
+		{
+			image.otsu2(2);
+		}
+		else {
+			image.otsu(class_numb);
+		}
+		
 		image.write(fout);
 
 	}
