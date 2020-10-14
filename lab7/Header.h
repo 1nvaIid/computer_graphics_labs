@@ -15,7 +15,7 @@ class P6 {
 private:
     int width, height, depth;
     vector<vector<Point>> data;
-    vector<vector<Point>> tmp;
+    vector<vector<Point>> newdata;
     int conv1(int x, int y, double sh);
     int conv2(int x, int y, double sh);
     int conv3(int x, int y, double sh);
@@ -31,7 +31,7 @@ class P5 {
 private:
     int width, height, depth;
     vector<vector<unsigned char>> data;
-    vector<vector<unsigned char>> tmp;
+    vector<vector<unsigned char>> newdata;
     int conv(int x, int y, double sh);
 public:
     P5(string);
